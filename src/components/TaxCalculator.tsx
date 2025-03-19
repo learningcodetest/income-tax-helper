@@ -153,8 +153,8 @@ const TaxCalculator: React.FC = () => {
     try {
       toPDF({
         filename: `tax-calculation-${regime}-regime-${new Date().toISOString().split('T')[0]}.pdf`,
-        targetRef: pdfRef,
-        page: { margin: 20 }
+        page: { margin: 20 },
+        element: pdfRef.current
       });
 
       toast({
