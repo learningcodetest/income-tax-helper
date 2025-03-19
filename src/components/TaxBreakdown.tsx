@@ -21,7 +21,7 @@ const TaxBreakdown: React.FC<TaxBreakdownProps> = ({ taxDetails, isVisible }) =>
 
   return (
     <div className={`w-full mt-8 overflow-hidden transition-all duration-500 ease-in-out ${isVisible ? 'opacity-100 max-h-[600px]' : 'opacity-0 max-h-0'}`}>
-      <Card className="p-4 glass animate-fade-in">
+      <Card className="p-4 glass animate-fade-in dark:bg-opacity-10">
         <h3 className="text-lg font-medium mb-4">Tax Breakdown</h3>
         <Table>
           <TableHeader>

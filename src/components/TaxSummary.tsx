@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/utils/taxCalculator";
 import type { TaxDetails } from "@/utils/taxCalculator";
 
@@ -15,8 +16,15 @@ const TaxSummary: React.FC<TaxSummaryProps> = ({ taxDetails, isVisible }) => {
 
   return (
     <div className={`w-full mt-6 transition-all duration-500 ease-in-out ${isVisible ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform translate-y-10'}`}>
-      <Card className="glass overflow-hidden animate-slide-in-up">
+      <Card className="glass overflow-hidden animate-slide-in-up dark:bg-opacity-10">
         <CardContent className="pt-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-medium">Tax Summary</h3>
+            <Badge variant={taxDetails.regime === "new" ? "default" : "secondary"}>
+              {taxDetails.regime === "new" ? "New Regime" : "Old Regime"}
+            </Badge>
+          </div>
+          
           <div className="grid gap-4">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Annual Income</span>
@@ -27,6 +35,13 @@ const TaxSummary: React.FC<TaxSummaryProps> = ({ taxDetails, isVisible }) => {
               <span className="text-muted-foreground">Standard Deduction</span>
               <span className="font-medium">- {formatCurrency(taxDetails.standardDeduction)}</span>
             </div>
+            
+            {taxDetails.regime === "old" && taxDetails.exemptions > 0 && (
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Additional Exemptions</span>
+                <span className="font-medium">- {formatCurrency(taxDetails.exemptions)}</span>
+              </div>
+            )}
             
             <div className="flex justify-between">
               <span className="text-muted-foreground">Taxable Income</span>

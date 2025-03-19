@@ -73,10 +73,22 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans transition-colors duration-300;
+  }
+  
+  /* Light mode background */
+  body {
     background-image: 
       radial-gradient(at 100% 0%, hsla(210, 100%, 97%, 0.4) 0px, transparent 50%),
       radial-gradient(at 0% 100%, hsla(210, 100%, 97%, 0.4) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+  
+  /* Dark mode background */
+  .dark body {
+    background-image: 
+      radial-gradient(at 100% 0%, hsla(240, 100%, 14%, 0.4) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(240, 100%, 14%, 0.4) 0px, transparent 50%);
     background-attachment: fixed;
   }
 
@@ -100,8 +112,17 @@
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
   }
   
+  .dark .glass {
+    background: rgba(17, 25, 40, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  
   .text-shadow {
     text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dark .text-shadow {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   }
 }
 

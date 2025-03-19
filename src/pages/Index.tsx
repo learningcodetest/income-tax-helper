@@ -10,7 +10,7 @@ const Index = () => {
           Income Tax Calculator
         </h1>
         <p className="text-muted-foreground mt-2 max-w-lg mx-auto">
-          Calculate your income tax liability under the new tax regime for FY 2025-26
+          Calculate your income tax liability under both new and old tax regimes for FY 2025-26
         </p>
       </header>
       
@@ -19,13 +19,33 @@ const Index = () => {
       </main>
       
       <footer className="mt-16 text-center text-sm text-muted-foreground max-w-2xl mx-auto animate-fade-in">
-        <p className="mb-2">
-          This calculator applies the standard deduction of ₹75,000 and 4% Health & Education Cess automatically.
-          Income up to ₹12,00,000 is exempt from tax under the new tax regime.
-        </p>
-        <p>
-          Tax rates: 0% (up to ₹4L), 5% (₹4L-₹8L), 10% (₹8L-₹12L), 15% (₹12L-₹16L), 20% (₹16L-₹20L), 25% (₹20L-₹24L), 30% (above ₹24L)
-        </p>
+        <div className="space-y-3">
+          <div>
+            <h3 className="font-semibold">New Tax Regime:</h3>
+            <p className="mb-2">
+              Standard deduction of ₹75,000 applies automatically. 
+              Income up to ₹12,00,000 is exempt from tax.
+            </p>
+            <p>
+              Tax rates: 0% (up to ₹4L), 5% (₹4L-₹8L), 10% (₹8L-₹12L), 15% (₹12L-₹16L), 20% (₹16L-₹20L), 25% (₹20L-₹24L), 30% (above ₹24L)
+            </p>
+          </div>
+          
+          <div>
+            <h3 className="font-semibold">Old Tax Regime:</h3>
+            <p className="mb-2">
+              Standard deduction of ₹50,000 applies automatically. 
+              Income up to ₹2,50,000 is exempt from tax.
+            </p>
+            <p>
+              Tax rates: 0% (up to ₹2.5L), 5% (₹2.5L-₹5L), 20% (₹5L-₹10L), 30% (above ₹10L)
+            </p>
+          </div>
+          
+          <p className="mt-4 pt-3 border-t border-border">
+            Health & Education Cess (4%) applies to the calculated tax amount in both regimes.
+          </p>
+        </div>
       </footer>
     </div>
   );
