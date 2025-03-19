@@ -45,6 +45,10 @@ const Index = () => {
           <p className="mt-4 pt-3 border-t border-border">
             Health & Education Cess (4%) applies to the calculated tax amount in both regimes.
           </p>
+          
+          <p className="text-xs opacity-60 pt-6">
+            Prompted by Harsh Nahar
+          </p>
         </div>
       </footer>
     </div>

@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -7,11 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, FileDown } from "lucide-react";
 import TaxSummary from "./TaxSummary";
 import TaxBreakdown from "./TaxBreakdown";
 import { calculateTax, type TaxDetails } from "@/utils/taxCalculator";
 import { toast } from "@/components/ui/use-toast";
+import { usePDF } from 'react-to-pdf';
 
 const TaxCalculator: React.FC = () => {
   const [income, setIncome] = useState<string>('');
@@ -21,6 +21,8 @@ const TaxCalculator: React.FC = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [showBreakdown, setShowBreakdown] = useState<boolean>(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  const pdfRef = useRef<HTMLDivElement>(null);
+  const { toPDF } = usePDF();
 
   // Set dark mode when toggled
   const toggleDarkMode = () => {
@@ -138,6 +140,37 @@ const TaxCalculator: React.FC = () => {
     return new Intl.NumberFormat('en-IN').format(parseInt(numericValue));
   };
 
+  const exportToPDF = () => {
+    if (!taxDetails) {
+      toast({
+        title: "Nothing to export",
+        description: "Please calculate your tax before exporting to PDF.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      toPDF({
+        filename: `tax-calculation-${regime}-regime-${new Date().toISOString().split('T')[0]}.pdf`,
+        targetRef: pdfRef,
+        page: { margin: 20 }
+      });
+
+      toast({
+        title: "PDF exported successfully",
+        description: "Your tax calculation has been exported as a PDF.",
+        variant: "default"
+      });
+    } catch (error) {
+      toast({
+        title: "Export failed",
+        description: "There was an issue exporting your tax calculation.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const displayValue = formatInputValue(income);
   const displayExemptions = formatInputValue(exemptions);
 
@@ -155,118 +188,129 @@ const TaxCalculator: React.FC = () => {
         </div>
       </div>
       
-      <Card className="glass shadow-lg border-0 dark:bg-opacity-10">
-        <CardHeader className="space-y-1 text-center">
-          <Badge variant="outline" className="mx-auto mb-2 px-3 py-1 animate-fade-in">
-            FY 2025-26
-          </Badge>
-          <CardTitle className="text-3xl font-bold transition-all duration-300 ease-in-out text-foreground/90 text-shadow">
-            How Much Will You Pay?
-          </CardTitle>
-        </CardHeader>
-        
-        <CardContent className="space-y-6">
-          <Tabs defaultValue="new" value={regime} onValueChange={(value) => handleRegimeChange(value as "new" | "old")} className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="new">New Regime</TabsTrigger>
-              <TabsTrigger value="old">Old Regime</TabsTrigger>
-            </TabsList>
-            <TabsContent value="new" className="mt-4">
-              <div className="text-xs text-muted-foreground">
-                <p>New Tax Regime with reduced rates and no exemptions. Standard deduction of ₹75,000 applies.</p>
-                <p className="mt-1">Income up to ₹12,00,000 is exempt from tax.</p>
-              </div>
-            </TabsContent>
-            <TabsContent value="old" className="mt-4">
-              <div className="text-xs text-muted-foreground">
-                <p>Old Tax Regime with higher rates but allows exemptions. Standard deduction of ₹50,000 applies.</p>
-                <p className="mt-1">Income up to ₹2,50,000 is exempt from tax.</p>
-              </div>
-            </TabsContent>
-          </Tabs>
+      <div ref={pdfRef} className="pdf-container">
+        <Card className="glass shadow-lg border-0 dark:bg-opacity-10">
+          <CardHeader className="space-y-1 text-center">
+            <Badge variant="outline" className="mx-auto mb-2 px-3 py-1 animate-fade-in">
+              FY 2025-26
+            </Badge>
+            <CardTitle className="text-3xl font-bold transition-all duration-300 ease-in-out text-foreground/90 text-shadow">
+              How Much Will You Pay?
+            </CardTitle>
+          </CardHeader>
+          
+          <CardContent className="space-y-6">
+            <Tabs defaultValue="new" value={regime} onValueChange={(value) => handleRegimeChange(value as "new" | "old")} className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="new">New Regime</TabsTrigger>
+                <TabsTrigger value="old">Old Regime</TabsTrigger>
+              </TabsList>
+              <TabsContent value="new" className="mt-4">
+                <div className="text-xs text-muted-foreground">
+                  <p>New Tax Regime with reduced rates and no exemptions. Standard deduction of ₹75,000 applies.</p>
+                  <p className="mt-1">Income up to ₹12,00,000 is exempt from tax.</p>
+                </div>
+              </TabsContent>
+              <TabsContent value="old" className="mt-4">
+                <div className="text-xs text-muted-foreground">
+                  <p>Old Tax Regime with higher rates but allows exemptions. Standard deduction of ₹50,000 applies.</p>
+                  <p className="mt-1">Income up to ₹2,50,000 is exempt from tax.</p>
+                </div>
+              </TabsContent>
+            </Tabs>
 
-          <div className="space-y-2">
-            <label htmlFor="income" className="block text-sm font-medium text-muted-foreground">
-              Your Annual Income
-            </label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₹</span>
-              <Input
-                id="income"
-                type="text"
-                value={displayValue}
-                onChange={handleIncomeChange}
-                placeholder="Enter your annual income"
-                className="pl-8 text-lg h-12 border-input bg-background"
-                autoComplete="off"
-              />
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Gross total income before any deductions
-            </p>
-          </div>
-
-          {regime === "old" && (
             <div className="space-y-2">
-              <label htmlFor="exemptions" className="block text-sm font-medium text-muted-foreground">
-                Exemptions & Deductions
+              <label htmlFor="income" className="block text-sm font-medium text-muted-foreground">
+                Your Annual Income
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₹</span>
                 <Input
-                  id="exemptions"
+                  id="income"
                   type="text"
-                  value={displayExemptions}
-                  onChange={handleExemptionsChange}
-                  placeholder="Enter total exemptions if any"
+                  value={displayValue}
+                  onChange={handleIncomeChange}
+                  placeholder="Enter your annual income"
                   className="pl-8 text-lg h-12 border-input bg-background"
                   autoComplete="off"
                 />
               </div>
               <p className="text-xs text-muted-foreground mt-1">
-                Section 80C, 80D, HRA, etc. (excluding ₹50,000 standard deduction)
+                Gross total income before any deductions
               </p>
             </div>
-          )}
 
-          <Button 
-            onClick={calculateTaxLiability} 
-            className="w-full h-12 text-lg font-medium transition-all"
-          >
-            Calculate
-          </Button>
-        </CardContent>
-
-        {taxDetails && (
-          <>
-            <TaxSummary taxDetails={taxDetails} isVisible={showResult} />
-            
-            {showResult && !taxDetails.isExempted && (
-              <div className="px-6 pb-4 mt-2">
-                <Button 
-                  variant="outline" 
-                  onClick={toggleBreakdown} 
-                  className="w-full"
-                >
-                  {showBreakdown ? "Hide Breakdown" : "Show Breakdown"}
-                </Button>
+            {regime === "old" && (
+              <div className="space-y-2">
+                <label htmlFor="exemptions" className="block text-sm font-medium text-muted-foreground">
+                  Exemptions & Deductions
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">₹</span>
+                  <Input
+                    id="exemptions"
+                    type="text"
+                    value={displayExemptions}
+                    onChange={handleExemptionsChange}
+                    placeholder="Enter total exemptions if any"
+                    className="pl-8 text-lg h-12 border-input bg-background"
+                    autoComplete="off"
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Section 80C, 80D, HRA, etc. (excluding ₹50,000 standard deduction)
+                </p>
               </div>
             )}
-            
-            <TaxBreakdown taxDetails={taxDetails} isVisible={showBreakdown} />
-            
-            <CardFooter className="flex justify-center pt-2 pb-6">
-              <Button 
-                variant="ghost" 
-                onClick={handleReset} 
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Reset
-              </Button>
-            </CardFooter>
-          </>
-        )}
-      </Card>
+
+            <Button 
+              onClick={calculateTaxLiability} 
+              className="w-full h-12 text-lg font-medium transition-all"
+            >
+              Calculate
+            </Button>
+          </CardContent>
+
+          {taxDetails && (
+            <>
+              <TaxSummary taxDetails={taxDetails} isVisible={showResult} />
+              
+              {showResult && !taxDetails.isExempted && (
+                <div className="px-6 pb-4 mt-2">
+                  <Button 
+                    variant="outline" 
+                    onClick={toggleBreakdown} 
+                    className="w-full"
+                  >
+                    {showBreakdown ? "Hide Breakdown" : "Show Breakdown"}
+                  </Button>
+                </div>
+              )}
+              
+              <TaxBreakdown taxDetails={taxDetails} isVisible={showBreakdown} />
+              
+              <CardFooter className="flex justify-between pt-2 pb-6">
+                <Button 
+                  variant="ghost" 
+                  onClick={handleReset} 
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  Reset
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  onClick={exportToPDF}
+                  className="flex items-center gap-2"
+                >
+                  <FileDown className="h-4 w-4" />
+                  Export as PDF
+                </Button>
+              </CardFooter>
+            </>
+          )}
+        </Card>
+      </div>
     </div>
   );
 };
