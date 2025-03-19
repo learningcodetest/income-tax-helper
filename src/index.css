@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -75,24 +76,26 @@
     @apply bg-background text-foreground font-sans transition-colors duration-300;
   }
   
-  /* Light mode background */
+  /* Light mode background with enhanced currency patterns */
   body {
     background-image: 
-      url("data:image/svg+xml,%3Csvg width='1440' height='800' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.03'%3E%3Cpath d='M300 200 H1140 V600 H300 Z' stroke='%23000' fill='none' stroke-width='1'/%3E%3Ctext x='720' y='400' font-size='120' font-family='Arial' text-anchor='middle' fill='%23000' opacity='0.1'%3E₹%3C/text%3E%3Ctext x='720' y='350' font-size='18' font-family='Arial' text-anchor='middle' fill='%23000'%3ETAX INVOICE%3C/text%3E%3Cpath d='M350 250 H1090 M350 550 H1090 M400 300 H600 M400 350 H550 M400 400 H650 M400 450 H500 M850 300 H1040 M850 350 H990 M850 400 H1040 M850 450 H940' stroke='%23000' stroke-width='1' opacity='0.05'/%3E%3C/g%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg width='1600' height='900' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.02'%3E%3Cpath d='M200 100 H1400 V800 H200 Z' stroke='%23000' fill='none' stroke-width='0.8'/%3E%3Ctext x='800' y='450' font-size='240' font-family='Arial' text-anchor='middle' fill='%23000' opacity='0.15'%3E₹%3C/text%3E%3Ctext x='800' y='200' font-size='22' font-family='Arial' text-anchor='middle' fill='%23000'%3EINCOME TAX RECEIPT%3C/text%3E%3Ctext x='1200' y='600' font-size='18' font-family='Arial' text-anchor='middle' fill='%23000'%3ETAX PAID%3C/text%3E%3Cpath d='M250 150 H1350 M250 750 H1350 M350 250 H750 M350 300 H600 M350 350 H650 M350 400 H550 M900 500 H1300 M900 550 H1150 M900 600 H1250 M900 650 H1100' stroke='%23000' stroke-width='0.5' opacity='0.08'/%3E%3Ccircle cx='1100' cy='300' r='70' stroke='%23000' stroke-width='0.5' fill='none' opacity='0.05'/%3E%3C/g%3E%3C/svg%3E"),
       radial-gradient(at 100% 0%, hsla(210, 100%, 97%, 0.4) 0px, transparent 50%),
       radial-gradient(at 0% 100%, hsla(210, 100%, 97%, 0.4) 0px, transparent 50%);
     background-attachment: fixed;
-    background-size: 100% auto;
+    background-size: 100% 100%;
+    background-position: center;
   }
   
-  /* Dark mode background */
+  /* Dark mode background with enhanced currency patterns */
   .dark body {
     background-image: 
-      url("data:image/svg+xml,%3Csvg width='1440' height='800' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.03'%3E%3Cpath d='M300 200 H1140 V600 H300 Z' stroke='%23fff' fill='none' stroke-width='1'/%3E%3Ctext x='720' y='400' font-size='120' font-family='Arial' text-anchor='middle' fill='%23fff' opacity='0.1'%3E₹%3C/text%3E%3Ctext x='720' y='350' font-size='18' font-family='Arial' text-anchor='middle' fill='%23fff'%3ETAX INVOICE%3C/text%3E%3Cpath d='M350 250 H1090 M350 550 H1090 M400 300 H600 M400 350 H550 M400 400 H650 M400 450 H500 M850 300 H1040 M850 350 H990 M850 400 H1040 M850 450 H940' stroke='%23fff' stroke-width='1' opacity='0.05'/%3E%3C/g%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg width='1600' height='900' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.03'%3E%3Cpath d='M200 100 H1400 V800 H200 Z' stroke='%23fff' fill='none' stroke-width='0.8'/%3E%3Ctext x='800' y='450' font-size='240' font-family='Arial' text-anchor='middle' fill='%23fff' opacity='0.1'%3E₹%3C/text%3E%3Ctext x='800' y='200' font-size='22' font-family='Arial' text-anchor='middle' fill='%23fff'%3EINCOME TAX RECEIPT%3C/text%3E%3Ctext x='1200' y='600' font-size='18' font-family='Arial' text-anchor='middle' fill='%23fff'%3ETAX PAID%3C/text%3E%3Cpath d='M250 150 H1350 M250 750 H1350 M350 250 H750 M350 300 H600 M350 350 H650 M350 400 H550 M900 500 H1300 M900 550 H1150 M900 600 H1250 M900 650 H1100' stroke='%23fff' stroke-width='0.5' opacity='0.08'/%3E%3Ccircle cx='1100' cy='300' r='70' stroke='%23fff' stroke-width='0.5' fill='none' opacity='0.05'/%3E%3C/g%3E%3C/svg%3E"),
       radial-gradient(at 100% 0%, hsla(240, 100%, 14%, 0.4) 0px, transparent 50%),
       radial-gradient(at 0% 100%, hsla(240, 100%, 14%, 0.4) 0px, transparent 50%);
     background-attachment: fixed;
-    background-size: 100% auto;
+    background-size: 100% 100%;
+    background-position: center;
   }
 
   input[type="number"]::-webkit-inner-spin-button,
@@ -126,6 +129,24 @@
   
   .dark .text-shadow {
     text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
   }
 }
 
